@@ -21,13 +21,14 @@ def get_columns():
 			"options": "Opportunity",
 			"width": 150,
 		},
-         
+         {"fieldname": "naming_series", "label": _("Series"), "fieldtype": "Data", "width": 100},
 		 {"fieldname": "sales_engineer", "label": _("Sales Engineer"), "fieldtype": "Data", "width": 100},
         {"fieldname": "in_date", "label": _("Opportunity In DateOpportunity In Date"), "fieldtype": "Date", "width": 100},
         {"fieldname": "status", "label": _("Status"), "fieldtype": "Data", "width": 100},
        
         {"fieldname": "customer", "label": _("Customer"), "fieldtype": "Data", "width": 100},
         {"fieldname": "project", "label": _("Project Cost Center"), "fieldtype": "Data", "width": 100},
+		{"fieldname": "project_catogary", "label": _("Project Category"), "fieldtype": "Data", "width": 100},
         {"fieldname": "is_lcipl_approved", "label": _("Is LCIPL Approved"), "fieldtype": "Data", "width": 100},
         {"fieldname": "list_of_competitors", "label": _("List of Competitors"), "fieldtype": "Data", "width": 100},
          {"fieldname": "initial_quote_submitted_values", "label": _("Initial Quote Submitted Value"), "fieldtype": "Currency", "width": 100},
@@ -61,11 +62,13 @@ def get_data(filters):
 		.on(address.name == dynamic_link.parent)
 		.select(
 			lead.name,
+			lead.naming_series,
             lead.sales_engineer,
             lead.in_date,
 			lead.status,
             lead.customer_name,
             lead.project,
+			lead.project_catogary,
             lead.is_lcipl_approved,
             lead.list_of_competitors,
             lead.initial_quote_submitted_values,
@@ -82,5 +85,13 @@ def get_data(filters):
 
 	if filters.get("status"):
 		query = query.where(lead.status == filters.get("status"))
+	if filters.get("sales_engineer"):
+		query = query.where(lead.sales_engineer == filters.get("sales_engineer"))
+	if filters.get("initial_quote_submitted_by"):
+		query = query.where(lead.initial_quote_submitted_by == filters.get("initial_quote_submitted_by"))
+	if filters.get("naming_series"):
+		query = query.where(lead.naming_series == filters.get("naming_series"))
+	if filters.get("project_catogary"):
+		query = query.where(lead.project_catogary == filters.get("project_catogary"))
 
 	return query.run(as_dict=1)
